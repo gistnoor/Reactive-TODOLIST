@@ -3,6 +3,8 @@
 var webpack           = require('webpack');
 var path              = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 
 module.exports = {
     // context: __dirname + 'src/',
@@ -16,7 +18,10 @@ module.exports = {
             {
                 test: /\.(js|jsx|es6)?$/,
                 exclude: [
-                    path.resolve(__dirname, 'node_modules')
+                    path.resolve(__dirname, 'node_modules'),
+                    path.resolve(__dirname, 'diagram'),
+                    path.resolve(__dirname, 'examples'),
+                    path.resolve(__dirname, 'assets')
                 ],
                 loader: 'babel-loader',
                 include: [
@@ -32,14 +37,16 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                loader: 'style-loader!css-loader' 
-            },
-          
+                loader: ExtractTextPlugin.extract(
+                    'style-loader',
+                    'css-loader'
+                )
+            },          
         ],
     },
     resolve: {
         root: path.resolve('./src'),
-        extenstions: ['', '.js', '.jsx','.ejs'],
+        extensions: ['', '.js', '.jsx', '.ejs'],
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -57,7 +64,11 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
             inject: true,
-            template: './src/index.ejs'
+            template: './src/views/index.ejs'
+        }),
+        new ExtractTextPlugin("styles/style.css", {
+            publicPath: '/styles/',
+            allChunks: true
         })
     ]
 };

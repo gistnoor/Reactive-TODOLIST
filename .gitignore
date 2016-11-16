@@ -1,3 +1,8 @@
 node_modules
-build
+dist
 *.lock
+examples
+diagram
+src/views/assets
+*.sublime-project
+*.sublime-workspace
